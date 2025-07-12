@@ -1,6 +1,6 @@
 {
   "name": "js-image-bg-remover",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Fast, portable background removal using WASM and U-2-Net",
   "main": "index.js",
   "types": "index.d.ts",
@@ -39,13 +39,14 @@
   "homepage": "https://github.com/sagarregmi2056/js-image-bg-remover#readme",
   "license": "MIT",
   "dependencies": {
+    "adm-zip": "^0.5.16",
     "node-fetch": "^3.3.2",
     "onnxruntime-web": "^1.22.0",
     "sharp": "^0.34.3"
   },
   "devDependencies": {
-    "commander": "^14.0.0",
-    "@types/node": "^18.0.0"
+    "@types/node": "^18.0.0",
+    "commander": "^14.0.0"
   },
   "engines": {
     "node": ">=18.0.0"

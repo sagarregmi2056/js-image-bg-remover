@@ -4,10 +4,14 @@ import { promises as fs } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import fetch from 'node-fetch';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const AdmZip = require('adm-zip');
+import { existsSync, mkdirSync, renameSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Use a more reliable model source
-const MODEL_URL = 'https://github.com/sagarregmi2056/js-image-bg-remover/releases/download/v1.1.0/u2net.onnx';
+const MODEL_URL = 'https://github.com/user-attachments/files/21196511/u2net.zip';
 const MODEL_PATH = join(__dirname, 'model', 'u2net.onnx');
 const MODEL_VERSION = '1.0.0';
 
@@ -17,32 +21,48 @@ const getModelPath = () => {
   return customDir ? join(customDir, 'u2net.onnx') : MODEL_PATH;
 };
 
-async function downloadWithProgress(url, path) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to download model: ${res.statusText}`);
-  
-  const total = parseInt(res.headers.get('content-length') || '0');
-  let downloaded = 0;
-  
-  const chunks = [];
-  const reader = res.body.getReader();
-  
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    
-    chunks.push(value);
-    downloaded += value.length;
-    
-    if (total) {
-      const percent = ((downloaded / total) * 100).toFixed(1);
-      process.stdout.write(`Downloading model: ${percent}% (${(downloaded/1024/1024).toFixed(1)}MB)\r`);
+async function downloadWithProgress(url, targetPath) {
+    try {
+        console.log('Downloading U-2-Net model...');
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to download model: ${response.statusText}`);
+        }
+
+        const contentLength = response.headers.get('content-length');
+        const total = parseInt(contentLength, 10);
+        let downloaded = 0;
+
+        const buffer = await response.arrayBuffer();
+        const zipBuffer = Buffer.from(buffer);
+        
+        // Create model directory if it doesn't exist
+        const modelDir = dirname(targetPath);
+        if (!existsSync(modelDir)) {
+            mkdirSync(modelDir, { recursive: true });
+        }
+
+        // Extract model file from ZIP
+        const zip = new AdmZip(zipBuffer);
+        const zipEntry = zip.getEntries()[0]; // Get first file in ZIP
+        if (!zipEntry) {
+            throw new Error('ZIP file is empty');
+        }
+
+        // Write the model file
+        zip.extractEntryTo(zipEntry, modelDir, false, true);
+        
+        // Rename extracted file to expected name if needed
+        const extractedPath = join(modelDir, zipEntry.entryName);
+        if (extractedPath !== targetPath) {
+            renameSync(extractedPath, targetPath);
+        }
+
+        console.log('Model downloaded and extracted successfully!');
+    } catch (error) {
+        console.error('Error downloading model:', error);
+        throw error;
     }
-  }
-  
-  process.stdout.write('\n');
-  const buffer = Buffer.concat(chunks);
-  await fs.writeFile(path, buffer);
 }
 
 async function ensureModel() {
