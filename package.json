@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "Fast, portable background removal using WASM and U-2-Net",
   "main": "index.js",
+  "types": "index.d.ts",
   "type": "module",
   "bin": {
     "cleancut": "./cli.js"
   },
   "scripts": {
     "test": "node test/test.js",
+    "bench": "node benchmarks/benchmark.js",
     "preinstall": "node scripts/check-system.js && node scripts/download-model.js",
     "postinstall": "node scripts/check-model.js"
   },
@@ -18,20 +20,35 @@
     "wasm",
     "u2net",
     "transparent",
-    "png"
+    "png",
+    "typescript",
+    "nodejs"
   ],
-  "author": "Sagar Regmi",
-  "license": "ISC",
+  "author": {
+    "name": "Sagar Regmi",
+    "email": "sagarregmi2056@gmail.com",
+    "url": "https://github.com/sagarregmi2056"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sagarregmi2056/js-image-bg-remover.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sagarregmi2056/js-image-bg-remover/issues"
+  },
+  "homepage": "https://github.com/sagarregmi2056/js-image-bg-remover#readme",
+  "license": "MIT",
   "dependencies": {
     "node-fetch": "^3.3.2",
     "onnxruntime-web": "^1.22.0",
     "sharp": "^0.34.3"
   },
   "devDependencies": {
-    "commander": "^14.0.0"
+    "commander": "^14.0.0",
+    "@types/node": "^18.0.0"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "os": [
     "linux",

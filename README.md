@@ -10,6 +10,12 @@ High-performance, portable background remover using U-2-Net and onnxruntime-web 
 - 📊 Benchmarks: Compare with other JS-based removers
 - 🧑‍💻 Open source: Easy to contribute and extend
 
+## Requirements
+- Node.js >= 18.0.0 (for ESM and modern features)
+- 2GB+ RAM recommended
+- ~200MB disk space for model
+- Supported platforms: Linux, macOS, Windows
+
 ## Installation
 
 ```bash
@@ -31,15 +37,72 @@ sudo apt-get install -y libheif-dev
 export BG_REMOVER_MODEL_DIR=/path/to/models
 ```
 
-## CLI Usage
-```bash
-cleancut input.jpg -o output.png
+## Usage
+
+### JavaScript (ESM)
+```javascript
+import { removeBackground } from 'js-image-bg-remover';
+
+// Basic usage
+await removeBackground('input.jpg', 'output.png');
+
+// With custom model directory
+await removeBackground('input.jpg', 'output.png', {
+  modelDir: '/path/to/models'
+});
+
+// Process multiple images
+const images = ['img1.jpg', 'img2.jpg', 'img3.jpg'];
+await Promise.all(
+  images.map(img => removeBackground(img, `output_${img}.png`))
+);
 ```
 
-## API Usage
-```js
-import { removeBackground } from 'js-image-bg-remover';
+### JavaScript (CommonJS)
+```javascript
+const { removeBackground } = require('js-image-bg-remover');
+
+async function processImage() {
+  await removeBackground('input.jpg', 'output.png');
+}
+```
+
+### TypeScript
+```typescript
+import { removeBackground, RemoveBackgroundOptions } from 'js-image-bg-remover';
+
+// Basic usage with type checking
 await removeBackground('input.jpg', 'output.png');
+
+// With typed options
+const options: RemoveBackgroundOptions = {
+  modelDir: '/custom/models',
+  showProgress: true
+};
+
+await removeBackground('input.jpg', 'output.png', options);
+
+// In an async function with error handling
+async function processImage(input: string, output: string) {
+  try {
+    await removeBackground(input, output);
+    console.log('Background removed successfully');
+  } catch (err) {
+    console.error('Failed to remove background:', err);
+  }
+}
+```
+
+### CLI Usage
+```bash
+# Basic usage
+cleancut input.jpg -o output.png
+
+# Custom model directory
+cleancut input.jpg -o output.png --model-dir /path/to/models
+
+# Process multiple images
+cleancut *.jpg --output-dir ./processed
 ```
 
 ## How it Works
@@ -58,6 +121,21 @@ Benchmarks are included in the `benchmarks/` folder. Run:
 ```bash
 npm run bench
 ```
+
+Sample benchmark results:
+```
+Size      | Avg (s) | Min (s) | Max (s)
+---------|---------|---------|----------
+500x500  |    0.8  |    0.7  |    0.9
+1024x1024|    1.2  |    1.0  |    1.4
+2048x2048|    2.5  |    2.2  |    2.8
+```
+
+Factors affecting performance:
+- Image size
+- CPU speed
+- Available RAM
+- Disk speed (for model loading)
 
 ## Production Tips
 1. **System Requirements**:
@@ -117,4 +195,23 @@ This software uses the U-2-Net model created by Xuebin Qin et al. If you use thi
 }
 ```
 
-The U-2-Net model is licensed under the Apache-2.0 license. The model weights are automatically downloaded from the official repository. 
+The U-2-Net model is licensed under the Apache-2.0 license. The model weights are automatically downloaded from the official repository.
+
+## Author
+
+**Sagar Regmi**
+- GitHub: [@sagarregmi2056](https://github.com/sagarregmi2056)
+- Email: sagarregmi2056@gmail.com
+
+## Support
+
+If you find this project helpful, please consider:
+- Giving it a star ⭐ on GitHub
+- Contributing to its development
+- Reporting issues or suggesting features
+- Sharing it with others who might find it useful
+
+## Links
+- [GitHub Repository](https://github.com/sagarregmi2056/js-image-bg-remover)
+- [Issue Tracker](https://github.com/sagarregmi2056/js-image-bg-remover/issues)
+- [npm Package](https://www.npmjs.com/package/js-image-bg-remover) 

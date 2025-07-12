@@ -1,6 +1,18 @@
 import { execSync } from 'child_process';
 import { platform } from 'os';
 
+function checkNodeVersion() {
+  const nodeVersion = process.version;
+  const majorVersion = parseInt(nodeVersion.slice(1).split('.')[0]);
+  
+  if (majorVersion < 18) {
+    console.error('\n❌ Error: Node.js version 18 or higher is required');
+    console.error(`Current version: ${nodeVersion}`);
+    console.error('Please upgrade Node.js to continue\n');
+    process.exit(1);
+  }
+}
+
 function checkUbuntuDependencies() {
   if (platform() !== 'linux') return;
   
@@ -44,4 +56,6 @@ function checkUbuntuDependencies() {
   }
 }
 
+// Run checks
+checkNodeVersion();
 checkUbuntuDependencies(); 
