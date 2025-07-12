@@ -1,0 +1,6 @@
+test/
+.git/
+node_modules/
+*.log
+model/
+.npmignore 

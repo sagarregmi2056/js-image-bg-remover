@@ -1,0 +1,41 @@
+{
+  "name": "js-image-bg-remover",
+  "version": "1.0.0",
+  "description": "Fast, portable background removal using WASM and U-2-Net",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "cleancut": "./cli.js"
+  },
+  "scripts": {
+    "test": "node test/test.js",
+    "preinstall": "node scripts/check-system.js && node scripts/download-model.js",
+    "postinstall": "node scripts/check-model.js"
+  },
+  "keywords": [
+    "background-removal",
+    "image-processing",
+    "wasm",
+    "u2net",
+    "transparent",
+    "png"
+  ],
+  "author": "Sagar Regmi",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "onnxruntime-web": "^1.22.0",
+    "sharp": "^0.34.3"
+  },
+  "devDependencies": {
+    "commander": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "os": [
+    "linux",
+    "darwin",
+    "win32"
+  ]
+}
