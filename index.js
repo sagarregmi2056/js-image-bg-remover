@@ -11,7 +11,7 @@ import { existsSync, mkdirSync, renameSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Use a more reliable model source
-const MODEL_URL = 'https://github.com/user-attachments/files/21196511/u2net.zip';
+const MODEL_URL = 'https://github.com/sagarregmi2056/js-image-bg-remover/releases/download/v1.1.0/u2net.zip';
 const MODEL_PATH = join(__dirname, 'model', 'u2net.onnx');
 const MODEL_VERSION = '1.0.0';
 
