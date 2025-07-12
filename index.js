@@ -6,15 +6,15 @@ import { fileURLToPath } from 'url';
 import fetch from 'node-fetch';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// Use jsDelivr CDN for faster downloads
-const MODEL_URL = 'https://cdn.jsdelivr.net/gh/danielgatis/rembg@v0.0.0/u2net.onnx';
-const DEFAULT_MODEL_PATH = join(__dirname, 'model', 'u2net.onnx');
-const MODEL_VERSION = '1.0.0'; // For future version control
+// Use a more reliable model source
+const MODEL_URL = 'https://github.com/sagarregmi2056/js-image-bg-remover/releases/download/v1.1.0/u2net.onnx';
+const MODEL_PATH = join(__dirname, 'model', 'u2net.onnx');
+const MODEL_VERSION = '1.0.0';
 
 // Allow custom model directory through env var
 const getModelPath = () => {
   const customDir = process.env.BG_REMOVER_MODEL_DIR;
-  return customDir ? join(customDir, 'u2net.onnx') : DEFAULT_MODEL_PATH;
+  return customDir ? join(customDir, 'u2net.onnx') : MODEL_PATH;
 };
 
 async function downloadWithProgress(url, path) {
